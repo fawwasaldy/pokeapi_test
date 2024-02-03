@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import 'package:pokeapi_test/models/pokemon_list.dart';
 import "package:pokeapi_test/services/remote_service.dart";
+import "package:pokeapi_test/views/pokemon_page.dart";
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,13 +46,16 @@ class _HomePageState extends State<HomePage> {
         child: Visibility(
           visible: isLoaded,
           replacement: const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(backgroundColor: Colors.white,),
           ),
           child: GridView.builder(
             itemCount: pokemonList != null ? pokemonList!.results.length : 0,
             itemBuilder: (context, index) {
+              String id = pokemonList!.results[index].url.substring(34, pokemonList!.results[index].url.length - 1);
               return TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PokemonPage(index: int.parse(id))));
+                },
                 style: TextButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   shape: RoundedRectangleBorder(
@@ -61,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     Text(pokemonList!.results[index].name, style: Theme.of(context).textTheme.bodyLarge),
-                    Text('ID: ${pokemonList!.results[index].url.substring(34, pokemonList!.results[index].url.length - 1)}', style: Theme.of(context).textTheme.bodySmall),
+                    Text('ID: $id', style: Theme.of(context).textTheme.bodySmall),
                   ],
                 ),
               );
@@ -70,7 +74,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
               childAspectRatio: 2,
-              maxCrossAxisExtent: WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.aspectRatio > 1 ? WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.width / 4 : WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.width / 2,
+              maxCrossAxisExtent: WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.width / 4,
             ),
           )
         ),
