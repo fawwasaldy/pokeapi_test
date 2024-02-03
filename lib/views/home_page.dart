@@ -11,9 +11,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PokemonList? pokemonList;
-  var isLoaded = false;
-  var offset = 0;
-  var limit = 20;
+  bool isLoaded = false;
+  int offset = 0;
+  int limit = 20;
 
   @override
   void initState() {
@@ -66,11 +66,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             }, 
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
               childAspectRatio: 2,
-              crossAxisCount: 2,
+              maxCrossAxisExtent: WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.aspectRatio > 1 ? WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.width / 4 : WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.width / 2,
             ),
           )
         ),
