@@ -33,12 +33,36 @@ class _PokemonPageState extends State<PokemonPage> {
     }
   }
 
+  Container containerDataPokemon(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.inversePrimary,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Nama: ${pokemon != null ? pokemon!.name : ''}', style: Theme.of(context).textTheme.bodyLarge),
+            Text('Tinggi: ${pokemon != null ? '${pokemon!.height.toDouble()/10} m' : ''}', style: Theme.of(context).textTheme.bodyLarge),
+            Text('Berat: ${pokemon != null ? '${pokemon!.weight.toDouble()/10} kg' : ''}', style: Theme.of(context).textTheme.bodyLarge),
+            Text('Base Experience: ${pokemon != null ? '${pokemon!.baseExperience} EXP.' : ''}', style: Theme.of(context).textTheme.bodyLarge),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Visibility(
       visible: isLoaded,
-      replacement: const Center(
-        child: CircularProgressIndicator(),
+      replacement: Container(
+        color: Colors.white,
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -49,11 +73,39 @@ class _PokemonPageState extends State<PokemonPage> {
           padding: const EdgeInsets.all(10.0),
           child: ListView(
             children: [
-              Image.network(pokemon != null ? pokemon!.sprites.frontDefault : ''),
-              Text('Name: ${pokemon != null ? pokemon!.name : ''}', style: Theme.of(context).textTheme.bodyLarge),
-              Text('Height: ${pokemon != null ? pokemon!.height : ''}', style: Theme.of(context).textTheme.bodyLarge),
-              Text('Weight: ${pokemon != null ? pokemon!.weight : ''}', style: Theme.of(context).textTheme.bodyLarge),
-              Text('Base Experience: ${pokemon != null ? pokemon!.baseExperience : ''}', style: Theme.of(context).textTheme.bodyLarge),
+              MediaQuery.of(context).orientation == Orientation.portrait
+              ? Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.network(pokemon != null ? pokemon!.sprites.frontDefault : '', width: MediaQuery.of(context).size.width, fit: BoxFit.fitWidth, filterQuality: FilterQuality.none)
+                    ),
+                  ),
+                  containerDataPokemon(context),
+                ],
+              )
+              : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.network(pokemon != null ? pokemon!.sprites.frontDefault : '', height: MediaQuery.of(context).size.height, fit: BoxFit.fitHeight, filterQuality: FilterQuality.none)
+                    ),
+                  ),
+                  containerDataPokemon(context),
+                ],
+              ),
             ],
           ),
         ),

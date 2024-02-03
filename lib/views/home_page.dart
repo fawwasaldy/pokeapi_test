@@ -79,47 +79,50 @@ class _HomePageState extends State<HomePage> {
           )
         ),
       ),
-      bottomNavigationBar: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          SizedBox(
-            width: 140,
-            height: 40,
-            child: ElevatedButton(
-              onPressed: () {
-                if(offset > 0) {
-                  offset -= limit;
-                  getData();
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: 140,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: () {
+                  if(offset > 0) {
+                    offset -= limit;
+                    getData();
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                child: Text("Previous", style: Theme.of(context).textTheme.bodyLarge),
               ),
-              child: Text("Previous", style: Theme.of(context).textTheme.bodyLarge),
             ),
-          ),
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: Center(child: Text((offset/limit+1).toInt().toString(), style: Theme.of(context).textTheme.titleSmall)),
-          ),
-          SizedBox(
-            width: 140,
-            height: 40,
-            child: ElevatedButton(
-              onPressed: () {
-                if(offset < pokemonList!.count - limit) {
-                  offset += limit;
-                  getData();
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            SizedBox(
+              width: 40,
+              height: 40,
+              child: Center(child: Text((offset/limit+1).toInt().toString(), style: Theme.of(context).textTheme.titleSmall)),
+            ),
+            SizedBox(
+              width: 140,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: () {
+                  if(offset < pokemonList!.count - limit) {
+                    offset += limit;
+                    getData();
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                ),
+                child: Text("Next", style: Theme.of(context).textTheme.bodyLarge),
               ),
-              child: Text("Next", style: Theme.of(context).textTheme.bodyLarge),
             ),
-          ),
-        ],
+          ],
+        ),
       )
     );
   }
