@@ -75,7 +75,7 @@ class _PokemonPageState extends State<PokemonPage> {
             children: [
               MediaQuery.of(context).orientation == Orientation.portrait
               ? Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -91,7 +91,7 @@ class _PokemonPageState extends State<PokemonPage> {
                 ],
               )
               : Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(10.0),
