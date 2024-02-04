@@ -10,9 +10,9 @@ String pokemonToJson(Pokemon data) => json.encode(data.toJson());
 
 class Pokemon {
     List<Ability> abilities;
-    int baseExperience;
+    dynamic baseExperience;
     List<Species> forms;
-    List<GameIndex> gameIndices;
+    List<dynamic> gameIndices;
     int height;
     List<dynamic> heldItems;
     int id;
@@ -55,7 +55,7 @@ class Pokemon {
         abilities: List<Ability>.from(json["abilities"].map((x) => Ability.fromJson(x))),
         baseExperience: json["base_experience"],
         forms: List<Species>.from(json["forms"].map((x) => Species.fromJson(x))),
-        gameIndices: List<GameIndex>.from(json["game_indices"].map((x) => GameIndex.fromJson(x))),
+        gameIndices: List<dynamic>.from(json["game_indices"].map((x) => x)),
         height: json["height"],
         heldItems: List<dynamic>.from(json["held_items"].map((x) => x)),
         id: json["id"],
@@ -77,7 +77,7 @@ class Pokemon {
         "abilities": List<dynamic>.from(abilities.map((x) => x.toJson())),
         "base_experience": baseExperience,
         "forms": List<dynamic>.from(forms.map((x) => x.toJson())),
-        "game_indices": List<dynamic>.from(gameIndices.map((x) => x.toJson())),
+        "game_indices": List<dynamic>.from(gameIndices.map((x) => x)),
         "height": height,
         "held_items": List<dynamic>.from(heldItems.map((x) => x)),
         "id": id,
@@ -137,26 +137,6 @@ class Species {
     Map<String, dynamic> toJson() => {
         "name": name,
         "url": url,
-    };
-}
-
-class GameIndex {
-    int gameIndex;
-    Species version;
-
-    GameIndex({
-        required this.gameIndex,
-        required this.version,
-    });
-
-    factory GameIndex.fromJson(Map<String, dynamic> json) => GameIndex(
-        gameIndex: json["game_index"],
-        version: Species.fromJson(json["version"]),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "game_index": gameIndex,
-        "version": version.toJson(),
     };
 }
 
@@ -317,13 +297,13 @@ class Other {
 }
 
 class Sprites {
-    String backDefault;
+    dynamic backDefault;
     dynamic backFemale;
-    String backShiny;
+    dynamic backShiny;
     dynamic backShinyFemale;
-    String frontDefault;
+    String? frontDefault;
     dynamic frontFemale;
-    String frontShiny;
+    dynamic frontShiny;
     dynamic frontShinyFemale;
     Other? other;
     Versions? versions;
@@ -393,12 +373,12 @@ class GenerationI {
 }
 
 class RedBlue {
-    String backDefault;
-    String backGray;
-    String backTransparent;
-    String frontDefault;
-    String frontGray;
-    String frontTransparent;
+    dynamic backDefault;
+    dynamic backGray;
+    dynamic backTransparent;
+    dynamic frontDefault;
+    dynamic frontGray;
+    dynamic frontTransparent;
 
     RedBlue({
         required this.backDefault,
@@ -453,14 +433,14 @@ class GenerationIi {
 }
 
 class Crystal {
-    String backDefault;
-    String backShiny;
-    String backShinyTransparent;
-    String backTransparent;
-    String frontDefault;
-    String frontShiny;
-    String frontShinyTransparent;
-    String frontTransparent;
+    dynamic backDefault;
+    dynamic backShiny;
+    dynamic backShinyTransparent;
+    dynamic backTransparent;
+    dynamic frontDefault;
+    dynamic frontShiny;
+    dynamic frontShinyTransparent;
+    dynamic frontTransparent;
 
     Crystal({
         required this.backDefault,
@@ -497,11 +477,11 @@ class Crystal {
 }
 
 class Gold {
-    String backDefault;
-    String backShiny;
-    String frontDefault;
-    String frontShiny;
-    String? frontTransparent;
+    dynamic backDefault;
+    dynamic backShiny;
+    dynamic frontDefault;
+    dynamic frontShiny;
+    dynamic frontTransparent;
 
     Gold({
         required this.backDefault,
@@ -553,8 +533,8 @@ class GenerationIii {
 }
 
 class OfficialArtwork {
-    String frontDefault;
-    String frontShiny;
+    dynamic frontDefault;
+    dynamic frontShiny;
 
     OfficialArtwork({
         required this.frontDefault,
@@ -573,9 +553,9 @@ class OfficialArtwork {
 }
 
 class Home {
-    String frontDefault;
+    String? frontDefault;
     dynamic frontFemale;
-    String frontShiny;
+    String? frontShiny;
     dynamic frontShinyFemale;
 
     Home({
@@ -621,7 +601,7 @@ class GenerationVii {
 }
 
 class DreamWorld {
-    String frontDefault;
+    dynamic frontDefault;
     dynamic frontFemale;
 
     DreamWorld({

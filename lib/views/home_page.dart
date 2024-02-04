@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(pokemonList!.results[index].name, style: Theme.of(context).textTheme.bodyLarge),
                     Text('ID: $id', style: Theme.of(context).textTheme.bodySmall),
+                    Image.network('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png', filterQuality: FilterQuality.none,)
                   ],
                 ),
               );
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
-              childAspectRatio: 2,
+              childAspectRatio: 1,
               maxCrossAxisExtent: WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.width / 4,
             ),
           )
