@@ -4,7 +4,9 @@ import "package:pokeapi_test/services/remote_service.dart";
 import "package:pokeapi_test/views/pokemon_page.dart";
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final String uId;
+
+  const HomePage({super.key, required this.uId});
 
   @override
   State<HomePage> createState() => _HomePageState();

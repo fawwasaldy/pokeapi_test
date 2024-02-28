@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokeapi_test/database/operation.dart';
-import 'package:pokeapi_test/models/user.dart';
+import 'package:pokeapi_test/database/database_service.dart';
 import 'package:pokeapi_test/views/home_page.dart';
 import 'package:uuid/uuid.dart';
 
@@ -28,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
+              controller: emailController,
               decoration: InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(
@@ -37,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 10.0),
             TextField(
+              controller: passwordController,
               decoration: InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(
@@ -46,11 +47,20 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 10.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 var uuid = const Uuid();
                 String uId = uuid.v5(Uuid.NAMESPACE_URL, emailController.text);
-                Operation().insertUser(User(id: uId, email: emailController.text, password: passwordController.text));
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(uId: uId)));
+                final db = await DatabaseService().database;
+
+                final List<Map<String, Object?>> uIdCheck = await db.rawQuery('SELECT u_id, u_password FROM user WHERE u_id = ?', [uId]);
+
+                if(uIdCheck.isEmpty || passwordController.text.compareTo(uIdCheck[0]['u_password'] as String) != 0) {
+                  emailController.clear();
+                  passwordController.clear();
+                }
+                else {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(uId: uId)));
+                }
               }, 
               child: const Text('Login'),
             ),
