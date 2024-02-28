@@ -1,5 +1,5 @@
-import 'package:pokeapi_test/models/pokemon.dart';
-import 'package:pokeapi_test/models/pokemon_list.dart';
+import 'package:pokeapi_test/models_pokeapi/pokemon.dart';
+import 'package:pokeapi_test/models_pokeapi/pokemon_list.dart';
 import 'package:http/http.dart' as http;
 
 class RemoteService {

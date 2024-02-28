@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import 'package:pokeapi_test/models/pokemon_list.dart';
+import 'package:pokeapi_test/models_pokeapi/pokemon_list.dart';
 import "package:pokeapi_test/services/remote_service.dart";
 import "package:pokeapi_test/views/pokemon_page.dart";
 

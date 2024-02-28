@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:pokeapi_test/models/pokemon.dart";
+import 'package:pokeapi_test/models_pokeapi/pokemon.dart';
 import "package:pokeapi_test/services/remote_service.dart";
 
 class PokemonPage extends StatefulWidget {
