@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:pokeapi_test/database/operation.dart';
-import 'package:pokeapi_test/models/inventory_item.dart';
+import 'package:pokeapi_test/models/pokemon_team.dart';
 import 'package:uuid/uuid.dart';
 
-class AddItemPage extends StatefulWidget {
+class AddTeamPage extends StatefulWidget {
   final String uId;
-  const AddItemPage({super.key, required this.uId});
+
+  const AddTeamPage({super.key, required this.uId});
 
   @override
-  State<AddItemPage> createState() => _AddItemPageState();
+  State<AddTeamPage> createState() => _AddTeamPageState();
 }
 
-class _AddItemPageState extends State<AddItemPage> {
+class _AddTeamPageState extends State<AddTeamPage> {
   final namaController = TextEditingController();
-  final countController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,22 +37,11 @@ class _AddItemPageState extends State<AddItemPage> {
               ),
             ),
             const SizedBox(height: 10.0),
-            TextField(
-              controller: countController,
-              decoration: InputDecoration(
-                labelText: 'Count',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 10.0),
             ElevatedButton(
               onPressed: () async {
                 var uuid = const Uuid();
-                String iiId = uuid.v4();
-                Operation().insertInventoryItem(InventoryItem(id: iiId, nama: namaController.text, count: int.parse(countController.text), uId: widget.uId));
+                String ptId = uuid.v4();
+                Operation().insertPokemonTeam(PokemonTeam(id: ptId, nama: namaController.text, pokemonCount: 0, uId: widget.uId));
                 Navigator.pop(context);
               }, 
               child: const Text('Tambah'),

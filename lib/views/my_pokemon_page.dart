@@ -6,10 +6,9 @@ import 'package:pokeapi_test/views/edit_pokemon_page.dart';
 
 class MyPokemonPage extends StatefulWidget {
   final String uId;
-  final String email;
   final List<Pokemon> pokemons;
 
-  const MyPokemonPage({super.key, required this.uId, required this.email, required this.pokemons});
+  const MyPokemonPage({super.key, required this.uId, required this.pokemons});
 
   @override
   State<MyPokemonPage> createState() => _MyPokemonPageState();
