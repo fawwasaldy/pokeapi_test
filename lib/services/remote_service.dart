@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class RemoteService {
 
-  Future<Pokemon?> fetchPokemon(int index) async {
+  Future<Pokemon?> fetchPokemon(dynamic index) async {
     var client = http.Client();
     String url = 'https://pokeapi.co/api/v2/pokemon/$index';
 

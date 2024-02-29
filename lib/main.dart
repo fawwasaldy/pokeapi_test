@@ -5,6 +5,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Operation().insertUser(User(id: 'abcd', email: 'cyan', password: 'cyan123'));
   // print(await Operation().users().toString());
+  // await DatabaseService().deleteDatabase(await DatabaseService().fullPath);
+  // var db = await DatabaseService().database;
+  // var result = await db.query('sqlite_master');
+  // print(result);
   runApp(const MyApp());
 }
 

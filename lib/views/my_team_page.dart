@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pokeapi_test/database/operation.dart';
 import 'package:pokeapi_test/models/pokemon_team.dart';
+import 'package:pokeapi_test/views/add_team_page.dart';
+import 'package:pokeapi_test/views/edit_team_page.dart';
+import 'package:pokeapi_test/views/my_roster_page.dart';
 
 class MyTeamPage extends StatefulWidget {
   final String uId;
@@ -19,6 +22,20 @@ class _MyTeamPageState extends State<MyTeamPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('My Team')),
       body: Column(children: [
+        const SizedBox(height: 5.0),
+        TextButton(
+          onPressed: () async {
+            final teams = await Operation().pokemonTeamsByUserId(widget.uId);
+            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyTeamPage(uId: widget.uId, teams: teams)));
+          }, 
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            minimumSize: const Size(120, 30),
+          ), 
+          child: const Text('Refresh', style: TextStyle(color: Colors.white, fontSize: 20.0)),
+        ),
+        const SizedBox(height: 5.0),
         Expanded(child: ListView.builder(
           itemCount: widget.teams.length,
           itemBuilder: (context, index) {
@@ -29,18 +46,20 @@ class _MyTeamPageState extends State<MyTeamPage> {
                     child: ListTile(
                       title: Text(widget.teams[index].nama),
                       subtitle: Text('Pokemon Count: ${widget.teams[index].pokemonCount.toString()}'),
-                      onTap: () {
-
+                      onTap: () async {
+                        final rostersJoinPokemon = await Operation().prJoinPTable(widget.teams[index].id);
+                        // final pokemons = await Operation().pokemons();                        
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyRosterPage(ptId: widget.teams[index].id, rostersJoinPokemon: rostersJoinPokemon,)));
                       },
                     ),
                   ),
                   Row(
                     children: [
                       IconButton(onPressed: () {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => EditTeamPage(uId: widget.uId, id: widget.teams[index].id, nama: widget.teams[index].nama, level: widget.teams[index].level.toString(),)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditTeamPage(uId: widget.uId, id: widget.teams[index].id, nama: widget.teams[index].nama, pokemonCount: widget.teams[index].pokemonCount.toString(),)));
                       }, icon: const Icon(Icons.edit)),
                       IconButton(onPressed: () {
-                      Operation().deletePokemon(widget.teams[index].id);
+                      Operation().deletePokemonTeam(widget.teams[index].id);
                       }, icon: const Icon(Icons.delete)),
                     ],
                   ),

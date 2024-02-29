@@ -1,3 +1,4 @@
+import 'package:pokeapi_test/models/pr_join_p.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:pokeapi_test/database/database_service.dart';
 import 'package:pokeapi_test/models/user.dart';
@@ -139,6 +140,27 @@ class Operation {
     ];
   }
 
+  Future<List<Pokemon>> pokemonsByUserId(String uId) async {
+    final db = await DatabaseService().database;
+
+    final List<Map<String, Object?>> pokemonMaps = await db.query('pokemon', where: 'u_id = ?', whereArgs: [uId]);
+
+    return [
+      for (final {
+        'p_id': id as String,
+        'p_nama': nama as String,
+        'p_level': level as int,
+        'u_id': uId as String,
+      } in pokemonMaps)
+        Pokemon(
+          id: id,
+          nama: nama,
+          level: level,
+          uId: uId,
+        ),
+    ];
+  }
+
   Future<int> updatePokemon(Pokemon pokemon) async {
     final db = await DatabaseService().database;
     return await db.update(
@@ -188,6 +210,40 @@ class Operation {
     ];
   }
 
+  Future<PokemonTeam> pokemonTeamById(String id) async {
+    final db = await DatabaseService().database;
+
+    final List<Map<String, Object?>> pokemonTeamMaps = await db.query('pokemonTeam', where: 'pt_id = ?', whereArgs: [id]);
+
+    return PokemonTeam(
+      id: pokemonTeamMaps[0]['pt_id'] as String,
+      nama: pokemonTeamMaps[0]['pt_nama'] as String,
+      pokemonCount: pokemonTeamMaps[0]['pt_pokemonCount'] as int,
+      uId: pokemonTeamMaps[0]['u_id'] as String,
+    );
+  }
+
+  Future<List<PokemonTeam>> pokemonTeamsByUserId(String uId) async {
+    final db = await DatabaseService().database;
+
+    final List<Map<String, Object?>> pokemonTeamMaps = await db.query('pokemonTeam', where: 'u_id = ?', whereArgs: [uId]);
+
+    return [
+      for (final {
+        'pt_id': id as String,
+        'pt_nama': nama as String,
+        'pt_pokemonCount': pokemonCount as int,
+        'u_id': uId as String,
+      } in pokemonTeamMaps)
+        PokemonTeam(
+          id: id,
+          nama: nama,
+          pokemonCount: pokemonCount,
+          uId: uId,
+        ),
+    ];
+  }
+
   Future<int> updatePokemonTeam(PokemonTeam pokemonTeam) async {
     final db = await DatabaseService().database;
     return await db.update(
@@ -196,6 +252,24 @@ class Operation {
       where: 'pt_id = ?',
       whereArgs: [pokemonTeam.id],
     );
+  }
+
+  Future<int> increasePokemonTeamCount(String id) async {
+    final db = await DatabaseService().database;
+    return await db.rawUpdate('''
+      UPDATE pokemonTeam
+      SET pt_pokemonCount = pt_pokemonCount + 1
+      WHERE pt_id = "$id"
+    ''');
+  }
+
+  Future<int> decreasePokemonTeamCount(String id) async {
+    final db = await DatabaseService().database;
+    return await db.rawUpdate('''
+      UPDATE pokemonTeam
+      SET pt_pokemonCount = pt_pokemonCount - 1
+      WHERE pt_id = "$id"
+    ''');
   }
 
   Future<void> deletePokemonTeam(String id) async {
@@ -282,6 +356,27 @@ class Operation {
     ];
   }
 
+  Future<List<InventoryItem>> inventoryItemsByUserId(String uId) async {
+    final db = await DatabaseService().database;
+
+    final List<Map<String, Object?>> inventoryItemMaps = await db.query('inventoryItem', where: 'u_id = ?', whereArgs: [uId]);
+
+    return [
+      for (final {
+        'ii_id': id as String,
+        'ii_nama': nama as String,
+        'ii_count': count as int,
+        'u_id': uId as String,
+      } in inventoryItemMaps)
+        InventoryItem(
+          id: id,
+          nama: nama,
+          count: count,
+          uId: uId,
+        ),
+    ];
+  }
+
   Future<int> updateInventoryItem(InventoryItem inventoryItem) async {
     final db = await DatabaseService().database;
     return await db.update(
@@ -301,5 +396,30 @@ class Operation {
     );
   }
 
-  items() {}
+    Future<List<PrJoinP>> prJoinPTable(String ptId) async {
+    final db = await DatabaseService().database;
+
+    final List<Map<String, Object?>> joinMaps = await db.rawQuery('''
+      SELECT * FROM pokemonRoster
+      JOIN pokemon ON pokemonRoster.pr_p_id = pokemon.p_id
+      WHERE pokemonRoster.pr_pt_id = "$ptId";
+    ''');
+
+    return [
+      for (final {
+        'pr_pt_id': ptId as String,
+        'p_id': pId as String,
+        'p_nama': nama as String,
+        'p_level': level as int,
+        'u_id': uId as String,
+      } in joinMaps) 
+        PrJoinP(
+          ptId: ptId,
+          pId: pId,
+          nama: nama,
+          level: level,
+          uId: uId,
+        ),
+      ];
+    } 
 }

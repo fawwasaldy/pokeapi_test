@@ -21,6 +21,20 @@ class _MyInventoryPageState extends State<MyInventoryPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('My Inventory')),
       body: Column(children: [
+        const SizedBox(height: 5.0),
+        TextButton(
+          onPressed: () async {
+            final items = await Operation().inventoryItemsByUserId(widget.uId);
+            Navigator.pop(context);
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyInventoryPage(uId: widget.uId, items: items)));
+          }, 
+          style: TextButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            minimumSize: const Size(120, 30),
+          ), 
+          child: const Text('Refresh', style: TextStyle(color: Colors.white, fontSize: 20.0)),
+        ),
+        const SizedBox(height: 5.0),
         Expanded(child: ListView.builder(
           itemCount: widget.items.length,
           itemBuilder: (context, index) {

@@ -3,7 +3,7 @@ import 'package:pokeapi_test/models_pokeapi/pokemon.dart';
 import "package:pokeapi_test/services/remote_service.dart";
 
 class PokemonPage extends StatefulWidget {
-  final int index;
+  final dynamic index;
 
   const PokemonPage({super.key, required this.index});
 

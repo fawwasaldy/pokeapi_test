@@ -13,8 +13,8 @@ class PokemonRoster {
 
     Map<String, Object?> toMap() {
       return {
-        'pt_id': ptId,
-        'p_id': pId
+        'pr_pt_id': ptId,
+        'pr_p_id': pId
       };
     }
 }
