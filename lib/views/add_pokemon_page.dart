@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pokeapi_test/database/operation.dart';
-import 'package:pokeapi_test/models/user.dart';
-import 'package:pokeapi_test/views/home_page.dart';
+import 'package:pokeapi_test/models/pokemon.dart';
 import 'package:uuid/uuid.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class AddPokemonPage extends StatefulWidget {
+  final String uId;
+
+  const AddPokemonPage({super.key, required this.uId});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<AddPokemonPage> createState() => _AddPokemonPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+class _AddPokemonPageState extends State<AddPokemonPage> {
+  final namaController = TextEditingController();
+  final levelController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +29,9 @@ class _SignupPageState extends State<SignupPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: emailController,
+              controller: namaController,
               decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: 'Nama',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -38,23 +39,24 @@ class _SignupPageState extends State<SignupPage> {
             ),
             const SizedBox(height: 10.0),
             TextField(
-              controller: passwordController,
+              controller: levelController,
               decoration: InputDecoration(
-                labelText: 'Password',
+                labelText: 'Level',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 10.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 var uuid = const Uuid();
-                String uId = uuid.v5(Uuid.NAMESPACE_URL, emailController.text);
-                Operation().insertUser(User(id: uId, email: emailController.text, password: passwordController.text));
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(uId: uId, email: emailController.text)));
+                String pId = uuid.v4();
+                Operation().insertPokemon(Pokemon(id: pId, nama: namaController.text, level: int.parse(levelController.text), uId: widget.uId));
+                Navigator.pop(context);
               }, 
-              child: const Text('Signup'),
+              child: const Text('Tambah'),
             ),
           ],
         ),

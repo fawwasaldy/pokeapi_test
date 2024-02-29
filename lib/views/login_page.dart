@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                   passwordController.clear();
                 }
                 else {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(uId: uId)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(uId: uId, email: emailController.text)));
                 }
               }, 
               child: const Text('Login'),

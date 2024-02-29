@@ -19,18 +19,29 @@ class _WelcomePageState extends State<WelcomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));}, 
-              child: const Text('Login'),
-            ),
-            TextButton(
-              onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPage()));}, 
-              child: const Text('Signup'),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));},
+                style: TextButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  minimumSize: const Size(120, 30),
+                ), 
+                child: const Text('Login', style: TextStyle(color: Colors.white, fontSize: 20.0)),
+              ),
+              const SizedBox(height: 10.0),
+              TextButton(
+                onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPage()));}, 
+                style: TextButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  minimumSize: const Size(120, 30),
+                ),
+                child: const Text('Signup', style: TextStyle(color: Colors.white, fontSize: 20.0)),
+              ),
+            ],
+          ),
         ),
       ),
     );

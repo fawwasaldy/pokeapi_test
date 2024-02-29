@@ -64,8 +64,6 @@ class Operation {
 
   Future<int> insertUser(User user) async {
     final db = await DatabaseService().database;
-    var result = await db.query('sqlite_schema');
-    print(result);
     return await db.insert(
       'user', 
       user.toMap(),
@@ -302,4 +300,6 @@ class Operation {
       whereArgs: [id],
     );
   }
+
+  items() {}
 }

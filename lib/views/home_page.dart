@@ -2,11 +2,13 @@ import "package:flutter/material.dart";
 import 'package:pokeapi_test/models_pokeapi/pokemon_list.dart';
 import "package:pokeapi_test/services/remote_service.dart";
 import "package:pokeapi_test/views/pokemon_page.dart";
+import 'package:pokeapi_test/widgets/nav_bar.dart';
 
 class HomePage extends StatefulWidget {
   final String uId;
+  final String email;
 
-  const HomePage({super.key, required this.uId});
+  const HomePage({super.key, required this.uId, required this.email});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -43,6 +45,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("PokeAPI Test", style: Theme.of(context).textTheme.titleLarge), 
       ),
+      drawer: NavBar(uId: widget.uId, email: widget.email),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Visibility(
