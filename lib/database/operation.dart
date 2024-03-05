@@ -254,6 +254,18 @@ class Operation {
     );
   }
 
+  Future<int> updatePokemonTeamCountByPokemonId(String id) async {
+    final db = await DatabaseService().database;
+    return await db.rawUpdate('''
+      UPDATE pokemonTeam
+      SET pt_pokemonCount = pt_pokemonCount - 1
+      WHERE pt_id = (
+        SELECT pr_pt_id FROM pokemonRoster
+        WHERE pr_p_id = "$id"
+      )
+    ''');
+  }
+
   Future<int> increasePokemonTeamCount(String id) async {
     final db = await DatabaseService().database;
     return await db.rawUpdate('''

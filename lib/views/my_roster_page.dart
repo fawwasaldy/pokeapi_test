@@ -7,53 +7,68 @@ import 'package:pokeapi_test/views/add_roster_page.dart';
 
 class MyRosterPage extends StatefulWidget {
   final String ptId;
-  final List<PrJoinP> rostersJoinPokemon;
 
-  const MyRosterPage({super.key, required this.ptId, required this.rostersJoinPokemon});
+  const MyRosterPage({super.key, required this.ptId});
 
   @override
   State<MyRosterPage> createState() => _MyRosterPageState();
 }
 
 class _MyRosterPageState extends State<MyRosterPage> {
+  List<PrJoinP> rostersJoinPokemon = [];
+
+  void refresh() {
+    Operation().prJoinPTable(widget.ptId).then((value) {
+      setState(() {
+        rostersJoinPokemon = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('My Roster')),
       body: Column(children: [
-        const SizedBox(height: 5.0),
-        TextButton(
-          onPressed: () async {
-            final team = await Operation().pokemonTeamById(widget.ptId);
-            final rostersJoinPokemon = await Operation().prJoinPTable(widget.ptId);
-            Navigator.pop(context);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyRosterPage(ptId: team.id, rostersJoinPokemon: rostersJoinPokemon)));
-          }, 
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            minimumSize: const Size(120, 30),
-          ), 
-          child: const Text('Refresh', style: TextStyle(color: Colors.white, fontSize: 20.0)),
-        ),
-        const SizedBox(height: 5.0),
+        // const SizedBox(height: 5.0),
+        // TextButton(
+        //   onPressed: () async {
+        //     final team = await Operation().pokemonTeamById(widget.ptId);
+        //     final rostersJoinPokemon = await Operation().prJoinPTable(widget.ptId);
+        //     Navigator.pop(context);
+        //     Navigator.push(context, MaterialPageRoute(builder: (context) => MyRosterPage(ptId: team.id, rostersJoinPokemon: rostersJoinPokemon)));
+        //   }, 
+        //   style: TextButton.styleFrom(
+        //     backgroundColor: Theme.of(context).colorScheme.primary,
+        //     minimumSize: const Size(120, 30),
+        //   ), 
+        //   child: const Text('Refresh', style: TextStyle(color: Colors.white, fontSize: 20.0)),
+        // ),
+        // const SizedBox(height: 5.0),
         Expanded(child: ListView.builder(
-          itemCount: widget.rostersJoinPokemon.length,
+          itemCount: rostersJoinPokemon.length,
           itemBuilder: (context, index) {
             return Card(
               child: Row(
                 children: [
                   Expanded(
                     child: ListTile(
-                      title: Text(widget.rostersJoinPokemon[index].nama),
-                      subtitle: Text('Level ${widget.rostersJoinPokemon[index].level.toString()}'),
+                      title: Text(rostersJoinPokemon[index].nama),
+                      subtitle: Text('Level ${rostersJoinPokemon[index].level.toString()}'),
                     ),
                   ),
                   Row(
                     children: [
                       IconButton(onPressed: () {
-                        Operation().deletePokemonRoster(widget.rostersJoinPokemon[index].ptId, widget.rostersJoinPokemon[index].pId);
+                        Operation().deletePokemonRoster(rostersJoinPokemon[index].ptId, rostersJoinPokemon[index].pId);
                         Operation().decreasePokemonTeamCount(widget.ptId);
+                        refresh();
                       }, icon: const Icon(Icons.delete)),
                     ],
                   ),
@@ -87,7 +102,7 @@ class _MyRosterPageState extends State<MyRosterPage> {
                 uId: uId,
               ),
           ];
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddRosterPage(ptId: widget.ptId, pokemonCandidates: pokemonCandidates)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddRosterPage(ptId: widget.ptId, pokemonCandidates: pokemonCandidates))).then((value) => refresh());
         },
         child: const Icon(Icons.add),
       ),

@@ -7,57 +7,69 @@ import 'package:pokeapi_test/views/pokemon_page.dart';
 
 class MyPokemonPage extends StatefulWidget {
   final String uId;
-  final List<Pokemon> pokemons;
 
-  const MyPokemonPage({super.key, required this.uId, required this.pokemons});
+  const MyPokemonPage({super.key, required this.uId});
 
   @override
   State<MyPokemonPage> createState() => _MyPokemonPageState();
 }
 
 class _MyPokemonPageState extends State<MyPokemonPage> {
+  List<Pokemon> pokemons = [];
+
+  void refresh() {
+    Operation().pokemonsByUserId(widget.uId).then((value) {
+      setState(() {
+        pokemons = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('My Pokemon')),
       body: Column(children: [
-        const SizedBox(height: 5.0),
-        TextButton(
-          onPressed: () async {
-            final pokemons = await Operation().pokemonsByUserId(widget.uId);
-            Navigator.pop(context);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyPokemonPage(uId: widget.uId, pokemons: pokemons)));
-          }, 
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            minimumSize: const Size(120, 30),
-          ), 
-          child: const Text('Refresh', style: TextStyle(color: Colors.white, fontSize: 20.0)),
-        ),
-        const SizedBox(height: 5.0),
+        // const SizedBox(height: 5.0),
+        // TextButton(
+        //   onPressed: refresh,
+        //   style: TextButton.styleFrom(
+        //     backgroundColor: Theme.of(context).colorScheme.primary,
+        //     minimumSize: const Size(120, 30),
+        //   ), 
+        //   child: const Text('Refresh', style: TextStyle(color: Colors.white, fontSize: 20.0)),
+        // ),
+        // const SizedBox(height: 5.0),
         Expanded(child: ListView.builder(
-          itemCount: widget.pokemons.length,
+          itemCount:pokemons.length,
           itemBuilder: (context, index) {
             return Card(
               child: Row(
                 children: [
                   Expanded(
                     child: ListTile(
-                      title: Text(widget.pokemons[index].nama),
-                      subtitle: Text('Level ${widget.pokemons[index].level.toString()}'),
+                      title: Text(pokemons[index].nama),
+                      subtitle: Text('Level ${pokemons[index].level.toString()}'),
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => PokemonPage(index: widget.pokemons[index].nama)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => PokemonPage(index: pokemons[index].nama))).then((value) => refresh());
                       },
                     ),
                   ),
                   Row(
                     children: [
                       IconButton(onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditPokemonPage(uId: widget.uId, id: widget.pokemons[index].id, nama: widget.pokemons[index].nama, level: widget.pokemons[index].level.toString(),)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditPokemonPage(uId: widget.uId, id: pokemons[index].id, nama: pokemons[index].nama, level: pokemons[index].level.toString(),))).then((value) => refresh());
                       }, icon: const Icon(Icons.edit)),
                       IconButton(onPressed: () {
-                      Operation().deletePokemon(widget.pokemons[index].id);
+                      Operation().deletePokemon(pokemons[index].id);
+                      Operation().updatePokemonTeamByPokemonId(pokemons[index].id);
+                      refresh();
                       }, icon: const Icon(Icons.delete)),
                     ],
                   ),
@@ -69,7 +81,7 @@ class _MyPokemonPageState extends State<MyPokemonPage> {
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddPokemonPage(uId: widget.uId)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddPokemonPage(uId: widget.uId))).then((value) => refresh());
         },
         child: const Icon(Icons.add),
       ),
